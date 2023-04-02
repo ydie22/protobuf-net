@@ -1032,7 +1032,9 @@ namespace ProtoBuf.Reflection
         }
         private bool IsNullableType(GeneratorContext ctx, FieldDescriptorProto field, string defaultValue, bool isOptional)
         {
-            if (!(ctx.IsEnabled("nullablevaluetype") && string.IsNullOrWhiteSpace(defaultValue) && isOptional))
+            var canBeNullable = (ctx.IsEnabled("nullablevaluetype") && string.IsNullOrWhiteSpace(defaultValue) && isOptional) 
+                                || field.Proto3Optional;
+            if (!canBeNullable)
                 return false;
 
             switch (field.type)
